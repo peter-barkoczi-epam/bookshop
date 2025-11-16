@@ -14,7 +14,7 @@ class User(db.Model):
     phone = Column(String, nullable=False)
     address = Column(String, nullable=False)
     login = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    password_hash = Column(String(64), nullable=False)
     role = relationship("Role", back_populates="users")
     bookings = relationship("Booking", back_populates="user")
 

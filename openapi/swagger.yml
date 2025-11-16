@@ -37,11 +37,17 @@ paths:
             schema:
                 type: object
                 properties:
+                  name:
+                    type: string
+                  role:
+                    type: integer
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  address:
+                    type: string
                   login:
-                    type: string
-                  first_name:
-                    type: string
-                  last_name:
                     type: string
                   password:
                     type: string
@@ -111,12 +117,20 @@ paths:
             schema:
               type: object
               properties:
-                login:
-                  type: string
-                first_name:
-                  type: string
-                last_name:
-                  type: string
+                  name:
+                    type: string
+                  role:
+                    type: integer
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  address:
+                    type: string
+                  login:
+                    type: string
+                  password:
+                    type: string
       responses:
         "200": # status code
           description: Updated an Item with given ID
@@ -124,6 +138,125 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+  /product:
+    get:
+      operationId: controllers.product_controller.ProductController.get_all
+      tags:
+        - Product
+      summary: Returns a list of products.
+      description: Returns a list of products.
+      responses:
+        "200": # status code
+          description: Return the entire list of products.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    post:
+      operationId: controllers.product_controller.ProductController.create
+      tags:
+        - Product
+      summary: Create a new Product
+      description: Create a new Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  author:
+                    type: string
+                  price:
+                    type: number
+                  image_path:
+                    type: string
+      responses:
+        "201":
+          description: Product Created successfully
+  /product/{product_id}:
+    get:
+      operationId: controllers.product_controller.ProductController.get
+      tags:
+        - Product
+      summary: Return a Product with given ID
+      description: Return a Product with given ID
+      parameters:
+        - name: product_id
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200": # status code
+          description: Return a Product with given ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    delete:
+        operationId: controllers.product_controller.ProductController.delete
+        tags:
+          - Product
+        summary: Delete a Product with given ID
+        description: Delete a Product with given ID
+        parameters:
+          - name: product_id
+            in: path
+            description: Product ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "200": # status code
+            description: Deleted an Product with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Product"
+    put:
+        operationId: controllers.product_controller.ProductController.update
+        tags:
+          - Product
+        summary: Update a Product with given ID
+        description: Update a Product with given ID
+        parameters:
+          - name: product_id
+            in: path
+            description: Product ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  author:
+                    type: string
+                  price:
+                    type: number
+                  image_path:
+                    type: string
+        responses:
+          "200": # status code
+            description: Updated an Item with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Product"
 
 components:
   schemas:
@@ -146,6 +279,22 @@ components:
         login:
           type: string
         password:
+          type: string
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: integer
+        author:
+          type: string
+        price:
+          type: number
+        image_path:
           type: string
   securitySchemes:
     basicAuth:

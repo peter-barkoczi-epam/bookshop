@@ -1,5 +1,5 @@
 from database import db
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, event
 from sqlalchemy.orm import relationship
 
 class Role(db.Model):
@@ -10,3 +10,10 @@ class Role(db.Model):
 
     def __repr__(self):
         return f"<Role {self.name}>"
+    
+@event.listens_for(Role.__table__, 'after_create')
+def create_roles(*args, **kwargs):
+    db.session.add(Role(id=1, name="Admin"))
+    db.session.add(Role(id=2, name="Manager"))
+    db.session.add(Role(id=3, name="Customer"))
+    db.session.commit()

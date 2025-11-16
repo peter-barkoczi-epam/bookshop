@@ -40,7 +40,7 @@ class UserService:
     def update(user_id: int):
         try:
             user_data = userSchema.dump(UserDao.fetch_by_id(user_id))
-            user_data.update(request.json())
+            user_data.update(request.get_json())
             user_data = userSchema.load(user_data)
             UserDao.update(user_data)
             return userSchema.dump(user_data), 404

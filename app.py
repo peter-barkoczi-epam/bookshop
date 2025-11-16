@@ -1,20 +1,22 @@
-from flask import Flask
 import connexion
+
+from flask import Flask
+from flask_migrate import Migrate
+
+from authenticator import verify_password
 from config import get_environment_config
 from database import db
 from dependencies import ma
-import routes.user_route as user_routes
 
 
 def create_app() -> Flask:
 
-    # options = {'swagger_ui': True}
-    # connexion_app = connexion.FlaskApp(__name__,
-    #                               specification_dir='./openapi/',
-    #                               swagger_ui_options=options)
-    # connexion_app.add_api('swagger.yml')
-    # application = connexion_app.app
-    application = Flask(__name__)
+    options = {'swagger_ui': True}
+    connexion_app = connexion.FlaskApp(__name__,
+                                  specification_dir='./openapi/',
+                                  options=options)
+    connexion_app.add_api('swagger.yml')
+    application = connexion_app.app
     application.config.from_object(get_environment_config())
 
     db.init_app(application)
@@ -24,15 +26,14 @@ def create_app() -> Flask:
         db.create_all()
         return application
 
-
-def add_routes(application):
-
-    application.add_url_rule("/user", methods=["GET", "POST"], view_func=user_routes.user_control)
-    application.add_url_rule("/user/<int:user_id>", methods=["GET", "PUT", "DELETE"], view_func=user_routes.user_manipulation)
+def basic_auth(username, password):
+    if verify_password(username, password):
+        return {"sub": username}
+    return None
 
 app = create_app()
+migrate = Migrate(app, db, render_as_batch=True)
 
 if __name__ == "__main__":
-    add_routes(app)
     app.run()
     

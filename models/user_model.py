@@ -4,7 +4,6 @@ import os
 from database import db
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-import models.role_model as role_model
 
 class User(db.Model):
     __tablename__ = "users"
@@ -16,7 +15,8 @@ class User(db.Model):
     address = Column(String, nullable=False)
     login = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    role = relationship(role_model.Role, back_populates="users")
+    role = relationship("Role", back_populates="users")
+    bookings = relationship("Booking", back_populates="user")
 
     def __repr__(self) -> str:
         return f"<User {self.login}>"

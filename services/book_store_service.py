@@ -22,9 +22,14 @@ class BookStoreService:
     @staticmethod
     def create():
         book_store_req_json = request.get_json()
-        book_store_data = bookStoreSchema.load(book_store_req_json)
-        BookStoreDao.create(book_store_data)
-        return bookStoreSchema.dump(book_store_data), 201
+        try:
+            book_store_data = bookStoreSchema.load(book_store_req_json)
+            BookStoreDao.create(book_store_data)
+            return bookStoreSchema.dump(book_store_data), 201
+        except ValidationError as error:
+            return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
+        except IntegrityError as error:
+            return jsonify(detail=error.args[0], status=400, title="Bad Request", type="about:blank")
     
     @staticmethod
     def delete(store_item_id: int):
@@ -39,7 +44,7 @@ class BookStoreService:
             book_store_data.update(request.get_json())
             book_store_data = bookStoreSchema.load(book_store_data)
             BookStoreDao.update(book_store_data)
-            return bookStoreSchema.dump(book_store_data), 404
+            return bookStoreSchema.dump(book_store_data), 204
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

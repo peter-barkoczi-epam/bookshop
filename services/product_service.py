@@ -22,9 +22,14 @@ class ProductService:
     @staticmethod
     def create():
         product_req_json = request.get_json()
-        product_data = productSchema.load(product_req_json)
-        ProductDao.create(product_data)
-        return productSchema.dump(product_data), 201
+        try:
+            product_data = productSchema.load(product_req_json)
+            ProductDao.create(product_data)
+            return productSchema.dump(product_data), 201
+        except ValidationError as error:
+            return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
+        except IntegrityError as error:
+            return jsonify(detail=error.args[0], status=400, title="Bad Request", type="about:blank")
     
     @staticmethod
     def delete(product_id: int):
@@ -39,7 +44,7 @@ class ProductService:
             product_data.update(request.get_json())
             product_data = productSchema.load(product_data)
             ProductDao.update(product_data)
-            return productSchema.dump(product_data), 404
+            return productSchema.dump(product_data), 204
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

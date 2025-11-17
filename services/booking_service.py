@@ -22,9 +22,15 @@ class BookingService:
     @staticmethod
     def create():
         booking_req_json = request.get_json()
-        booking_data = bookingSchema.load(booking_req_json)
-        BookingDao.create(booking_data)
-        return bookingSchema.dump(booking_data), 201
+        try:
+            booking_data = bookingSchema.load(booking_req_json)
+            BookingDao.create(booking_data)
+            return bookingSchema.dump(booking_data), 201
+        except ValidationError as error:
+            return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
+        except IntegrityError as error:
+            return jsonify(detail=error.args[0], status=400, title="Bad Request", type="about:blank")
+
     
     @staticmethod
     def delete(booking_id: int):
@@ -39,7 +45,7 @@ class BookingService:
             booking_data.update(request.get_json())
             booking_data = bookingSchema.load(booking_data)
             BookingDao.update(booking_data)
-            return bookingSchema.dump(booking_data), 404
+            return bookingSchema.dump(booking_data), 204
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

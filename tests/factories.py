@@ -6,6 +6,9 @@ from models.bookings_model import Booking
 from models.book_store_model import BookStore
 import datetime
 from schemas.user_schema import UserSchema
+from schemas.product_schema import ProductSchema
+from schemas.booking_schema import BookingSchema
+from schemas.store_item_schema import BookStoreItemSchema
 
 
 class UserFactory:
@@ -60,6 +63,16 @@ class ProductFactory:
 
         return Product(**data)
 
+    @staticmethod
+    def dump(product: Product) -> Dict:
+        schema = ProductSchema()
+        return schema.dump(product)
+
+    @classmethod
+    def create_payload(cls, **overrides) -> Dict:
+        product = cls.build(**overrides)
+        return cls.dump(product)
+
 class BookingFactory:
     _id_counter = 1
 
@@ -82,6 +95,16 @@ class BookingFactory:
 
         return Booking(**data)
 
+    @staticmethod
+    def dump(booking: Booking) -> Dict:
+        schema = BookingSchema()
+        return schema.dump(booking)
+
+    @classmethod
+    def create_payload(cls, **overrides) -> Dict:
+        booking = cls.build(**overrides)
+        return cls.dump(booking)
+
 class BookStoreItemFactory:
     _id_counter = 1
 
@@ -101,4 +124,14 @@ class BookStoreItemFactory:
 
         return BookStore(**data)
 
-__all__ = ['UserFactory', 'ProductFactory', 'BookingFactory']
+    @staticmethod
+    def dump(book_store_item: BookStore) -> Dict:
+        schema = BookStoreItemSchema()
+        return schema.dump(book_store_item)
+
+    @classmethod
+    def create_payload(cls, **overrides) -> Dict:
+        book_store_item = cls.build(**overrides)
+        return cls.dump(book_store_item)
+
+__all__ = ['UserFactory', 'ProductFactory', 'BookingFactory', 'BookStoreItemFactory']

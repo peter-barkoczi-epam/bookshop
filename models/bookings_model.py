@@ -9,7 +9,7 @@ class Booking(db.Model):
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     delivery_address = Column(String(256), nullable=False)
     delivery_date = Column(Date, nullable=False)
-    delivery_date = Column(DateTime, nullable=False)
+    delivery_time = Column(DateTime, nullable=False)
     status_id = Column(Integer, ForeignKey("booking_status.id"), nullable=False)
     quantity = Column(Integer)
     user = relationship("User", back_populates="bookings")

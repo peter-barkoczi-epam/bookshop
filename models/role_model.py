@@ -1,6 +1,12 @@
+import enum
 from database import db
 from sqlalchemy import Column, Integer, String, event
 from sqlalchemy.orm import relationship
+
+class RoleEnum(enum.Enum):
+    ADMIN = 1
+    MANAGER = 2
+    CUSTOMER = 3
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -13,7 +19,7 @@ class Role(db.Model):
     
 @event.listens_for(Role.__table__, 'after_create')
 def create_roles(*args, **kwargs):
-    db.session.add(Role(id=1, name="Admin"))
-    db.session.add(Role(id=2, name="Manager"))
-    db.session.add(Role(id=3, name="Customer"))
+    db.session.add(Role(id=RoleEnum.ADMIN.value, name=str(RoleEnum.ADMIN.name)))
+    db.session.add(Role(id=RoleEnum.MANAGER.value, name=str(RoleEnum.MANAGER.name)))
+    db.session.add(Role(id=RoleEnum.CUSTOMER.value, name=str(RoleEnum.CUSTOMER.name)))
     db.session.commit()

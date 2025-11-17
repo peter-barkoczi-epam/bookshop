@@ -257,7 +257,258 @@ paths:
               application/json:
                 schema:
                   $ref: "#/components/schemas/Product"
-
+  /booking:
+    get:
+      operationId: controllers.booking_controller.BookingController.get_all
+      tags:
+        - Booking
+      summary: Returns a list of bookings.
+      description: Returns a list of bookings.
+      responses:
+        "200": # status code
+          description: Return the entire list of bookings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+    post:
+      operationId: controllers.booking_controller.BookingController.create
+      tags:
+        - Booking
+      summary: Create a new Booking
+      description: Create a new Booking
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    format: int64
+                  product_id:
+                    type: integer
+                    format: int64
+                  delivery_address:
+                    type: string
+                  delivery_date:
+                    type: string
+                    format: date
+                  delivery_time:
+                    type: string
+                    format: date-time
+                  status_id:
+                    type: integer
+                    format: int64
+                  quantity:
+                    type: integer
+                    format: int64
+      responses:
+        "201":
+          description: Booking Created successfully
+  /booking/{booking_id}:
+    get:
+      operationId: controllers.booking_controller.BookingController.get
+      tags:
+        - Booking
+      summary: Return a Booking with given ID
+      description: Return a Booking with given ID
+      parameters:
+        - name: booking_id
+          in: path
+          description: Booking ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200": # status code
+          description: Return a Booking with given ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+    delete:
+        operationId: controllers.booking_controller.BookingController.delete
+        tags:
+          - Booking
+        summary: Delete a Booking with given ID
+        description: Delete a Booking with given ID
+        parameters:
+          - name: booking_id
+            in: path
+            description: Booking ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "200": # status code
+            description: Deleted an Booking with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Booking"
+    put:
+        operationId: controllers.booking_controller.BookingController.update
+        tags:
+          - Booking
+        summary: Update a Booking with given ID
+        description: Update a Booking with given ID
+        parameters:
+          - name: booking_id
+            in: path
+            description: Booking ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  author:
+                    type: string
+                  price:
+                    type: number
+                  image_path:
+                    type: string
+        responses:
+          "200": # status code
+            description: Updated an Item with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Booking"
+  /book_store:
+    get:
+      operationId: controllers.book_store_controller.BookStoreController.get_all
+      tags:
+        - Book_Store
+      summary: Returns a list of Book_Store_Items.
+      description: Returns a list of Book_Store_Items.
+      responses:
+        "200": # status code
+          description: Return the entire list of Book_Store_Items.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book_Store_Item"
+    post:
+      operationId: controllers.book_store_controller.BookStoreController.create
+      tags:
+        - Book_Store
+      summary: Create a new Book_Store_Item
+      description: Create a new Book_Store_Item
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  product_id:
+                    type: integer
+                    format: int64
+                  available_qty:
+                    type: integer
+                    format: int64
+                  booked_qty:
+                    type: integer
+                    format: int64
+                  sold_qty:
+                    type: integer
+                    format: int64 
+      responses:
+        "201":
+          description: Book_Store_Item Created successfully
+  /book_store/{book_store_item_id}:
+    get:
+      operationId: controllers.book_store_controller.BookStoreController.get
+      tags:
+        - Book_Store
+      summary: Return a Book_Store_Item with given ID
+      description: Return a Book_Store_Item with given ID
+      parameters:
+        - name: book_store_item_id
+          in: path
+          description: Book_Store_Item ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200": # status code
+          description: Return a Booking with given ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Book_Store_Item"
+    delete:
+        operationId: controllers.book_store_controller.BookStoreController.delete
+        tags:
+          - Book_Store
+        summary: Delete a Book_Store_Item with given ID
+        description: Delete a Book_Store_Item with given ID
+        parameters:
+          - name: book_store_item_id
+            in: path
+            description: Book_Store_Item ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "200": # status code
+            description: Deleted a Book_Store_Item with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Book_Store_Item"
+    put:
+        operationId: controllers.book_store_controller.BookStoreController.update
+        tags:
+          - Book_Store
+        summary: Update a Book_Store_Item with given ID
+        description: Update a Book_Store_Item with given ID
+        parameters:
+          - name: book_store_item_id
+            in: path
+            description: Book_Store_Item ID
+            required: true
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_id:
+                    type: integer
+                    format: int64
+                  available_qty:
+                    type: integer
+                    format: int64
+                  booked_qty:
+                    type: integer
+                    format: int64
+                  sold_qty:
+                    type: integer
+                    format: int64 
+        responses:
+          "200": # status code
+            description: Updated an Item with given ID
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Book_Store_Item"
 components:
   schemas:
     User:
@@ -296,6 +547,50 @@ components:
           type: number
         image_path:
           type: string
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        product_id:
+          type: integer
+          format: int64
+        delivery_address:
+          type: string
+        delivery_date:
+          type: string
+          format: date
+        delivery_time:
+          type: string
+          format: date-time
+        status_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+    Book_Store_Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        product_id:
+          type: integer
+          format: int64
+        available_qty:
+          type: integer
+          format: int64
+        booked_qty:
+          type: integer
+          format: int64
+        sold_qty:
+          type: integer
+          format: int64  
   securitySchemes:
     basicAuth:
       type: http

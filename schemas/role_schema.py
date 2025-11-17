@@ -2,7 +2,7 @@ from database import db
 from dependencies import ma
 from models.role_model import Role
 
-class UserSchema(ma.SQLAlchemySchema):
+class RoleSchema(ma.SQLAlchemySchema):
 
     class Meta:
         model = Role

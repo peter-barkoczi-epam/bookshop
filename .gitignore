@@ -66,7 +66,17 @@ SageMath parsed files
 *.sage.py
 
 Environments
-.env .venv .new_venv .venv311 env/ venv/ new_venv/ venv311/ ENV/ env.bak/ venv.bak/
+.env
+.venv
+.new_venv
+.venv311
+env/
+venv/
+new_venv/
+venv311/
+ENV/
+env.bak/
+venv.bak/
 
 Spyder project settings
 .spyderproject .spyderproject.legacy

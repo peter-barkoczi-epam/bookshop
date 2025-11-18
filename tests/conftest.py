@@ -9,6 +9,7 @@ os.environ['ENV'] = 'TESTING'
 
 import pytest
 from app import create_app
+import base64
 
 
 @pytest.fixture(scope="session")
@@ -25,6 +26,15 @@ def app_ctx(app):
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@pytest.fixture
+def auth_header():
+    def _auth_header(login, password):
+        token = base64.b64encode(f"{login}:{password}".encode()).decode()
+        return {"Authorization": f"Basic {token}"}
+
+    return _auth_header
     
 @pytest.fixture
 def db(app_ctx):

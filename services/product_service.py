@@ -44,7 +44,7 @@ class ProductService:
             product_data.update(request.get_json())
             product_data = productSchema.load(product_data)
             ProductDao.update(product_data)
-            return productSchema.dump(product_data), 204
+            return productSchema.dump(product_data), 200
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

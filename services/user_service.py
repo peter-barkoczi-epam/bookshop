@@ -45,10 +45,11 @@ class UserService:
     def update(user_id: int):
         try:
             user_data = userSchema.dump(UserDao.fetch_by_id(user_id))
+            user_data.pop('role', None)
             user_data.update(request.get_json())
             user_data = userSchema.load(user_data)
             UserDao.update(user_data)
-            return userSchema.dump(user_data), 204
+            return userSchema.dump(user_data), 200
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

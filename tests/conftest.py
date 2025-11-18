@@ -25,3 +25,51 @@ def app_ctx(app):
 @pytest.fixture
 def client(app):
     return app.test_client()
+    
+@pytest.fixture
+def db(app_ctx):
+    from database import db as _db
+
+    _db.drop_all()
+    if _db.engine.dialect.name == "sqlite":
+        from sqlalchemy import text
+        from sqlalchemy.exc import OperationalError
+        try:
+            _db.session.execute(text("DELETE FROM sqlite_sequence"))
+            _db.session.commit()
+        except OperationalError:
+            pass
+    _db.create_all()
+    yield _db
+    _db.session.remove()
+    _db.drop_all()
+
+
+@pytest.fixture(autouse=True)
+def db_transaction(app_ctx, db):
+
+    from database import db as _db
+    from sqlalchemy.orm import scoped_session, sessionmaker
+    from sqlalchemy import event
+
+    connection = _db.engine.connect()
+    transaction = connection.begin()
+
+    session_factory = sessionmaker(bind=connection)
+    session = scoped_session(session_factory)
+    old_session = _db.session
+    _db.session = session
+
+    session().begin_nested()
+
+    @event.listens_for(session(), "after_transaction_end")
+    def restart_savepoint(sess, trans):
+        if trans.nested and not trans._parent:
+            sess.begin_nested()
+
+    yield
+
+    session.remove()
+    _db.session = old_session
+    transaction.rollback()
+    connection.close()

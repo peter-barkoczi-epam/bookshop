@@ -41,10 +41,11 @@ class BookStoreService:
     def update(store_item_id: int):
         try:
             book_store_data = bookStoreSchema.dump(BookStoreDao.fetch_by_id(store_item_id))
+            book_store_data.pop('product', None)
             book_store_data.update(request.get_json())
             book_store_data = bookStoreSchema.load(book_store_data)
             BookStoreDao.update(book_store_data)
-            return bookStoreSchema.dump(book_store_data), 204
+            return bookStoreSchema.dump(book_store_data), 200
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:

@@ -4,11 +4,12 @@ from services.user_service import UserService
 class UserController:
 
     @staticmethod
+    @auth.login_required(role='customer')
     def get(user_id: int):
         return UserService.get(user_id)
 
     @staticmethod
-    @auth.login_required
+    @auth.login_required(role='admin')
     def get_all():
         return UserService.get_all()
     

@@ -10,3 +10,8 @@ def verify_password(login, password):
     if not user or not user.verify_password(password):
         return False
     return True
+
+@auth.get_user_roles
+def get_user_roles(credentials):
+    user = User.query.filter_by(login=credentials.username).first()
+    return str(user.role.name).lower() if user else None

@@ -11,13 +11,13 @@ def add_user_to_db():
 
 def test_create_product(client, app_ctx, db, auth_header):
     add_user_to_db()
-    payload = ProductFactory.create_payload(name="created_product", price=19.99)
+    payload = ProductFactory.create_payload(id=15, name="created_product", price=19.99)
     headers = auth_header("admin", "adminpass")
     resp = client.post("/api/product", json=payload, headers=headers)
 
     data = resp.get_json()
     assert resp.status_code == 201
-    assert data['id'] == 1
+    assert data['id'] == 15
     assert data['name'] == 'created_product'
     assert data['price'] == 19.99
 

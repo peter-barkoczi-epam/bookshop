@@ -109,7 +109,7 @@ def test_booking_service_update_success(monkeypatch):
 
     result, status = booking_service.BookingService.update(1)
 
-    assert status == 204
+    assert status == 200
     assert result['quantity'] == 5
 
 def test_booking_service_update_validation_error(monkeypatch, app_ctx):

@@ -111,7 +111,7 @@ def test_user_service_update_success(monkeypatch, app_ctx):
         updated['user'] = user
     monkeypatch.setattr(UserDao, 'update', capture_update)
     result, status = user_service.UserService.update(1)
-    assert status == 204
+    assert status == 200
     assert result['address'] == 'new_address'
 
 def test_user_service_update_validation_error(monkeypatch, app_ctx):

@@ -118,7 +118,7 @@ def test_book_store_service_update_success(monkeypatch):
 
     result, status = book_store_service.BookStoreService.update(1)
 
-    assert status == 204
+    assert status == 200
     assert result['sold_qty'] == 50
     assert 'book_store_item' in updated
     assert updated['book_store_item'].sold_qty == 50

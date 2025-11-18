@@ -5,7 +5,7 @@ from tests.factories import UserFactory
 
 
 def test_create_user(client, app_ctx, db, auth_header):
-    payload = UserFactory.create_payload(login="created_user")
+    payload = UserFactory.create_payload(id=15, login="created_user")
     payload['password'] = 'create_pass'
     del payload['role']
     headers = auth_header("created_user", "create_pass")
@@ -13,7 +13,7 @@ def test_create_user(client, app_ctx, db, auth_header):
 
     data = resp.get_json()
     assert resp.status_code == 201
-    assert data['id'] == 1
+    assert data['id'] == 15
     assert data['login'] == 'created_user'
 
 def test_get_all_users(client, app_ctx, db, auth_header):

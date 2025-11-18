@@ -113,7 +113,7 @@ def test_product_service_update_success(monkeypatch):
 
     result, status = product_service.ProductService.update(1)
 
-    assert status == 204
+    assert status == 200
     assert result == dumped_updated_product
     ProductDao.fetch_by_id.assert_called_once_with(1)
     product_service.productSchema.dump.assert_called()

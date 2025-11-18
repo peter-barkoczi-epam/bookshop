@@ -25,7 +25,8 @@ def app_ctx(app):
 
 @pytest.fixture
 def client(app):
-    return app.test_client()
+    with app.test_client() as client:
+        yield client
 
 
 @pytest.fixture
@@ -39,7 +40,6 @@ def auth_header():
 @pytest.fixture
 def db(app_ctx):
     from database import db as _db
-
     _db.drop_all()
     if _db.engine.dialect.name == "sqlite":
         from sqlalchemy import text
@@ -77,9 +77,10 @@ def db_transaction(app_ctx, db):
         if trans.nested and not trans._parent:
             sess.begin_nested()
 
-    yield
-
-    session.remove()
-    _db.session = old_session
-    transaction.rollback()
-    connection.close()
+    try:
+        yield
+    finally:
+        session.remove()
+        _db.session = old_session
+        transaction.rollback()
+        connection.close()

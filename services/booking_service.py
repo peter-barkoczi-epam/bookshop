@@ -42,10 +42,13 @@ class BookingService:
     def update(booking_id: int):
         try:
             booking_data = bookingSchema.dump(BookingDao.fetch_by_id(booking_id))
+            booking_data.pop('status', None)
+            booking_data.pop('user', None)
+            booking_data.pop('product', None)
             booking_data.update(request.get_json())
             booking_data = bookingSchema.load(booking_data)
             BookingDao.update(booking_data)
-            return bookingSchema.dump(booking_data), 204
+            return bookingSchema.dump(booking_data), 200
         except ValidationError as error:
             return jsonify(detail=str(error), status=400, title="Bad Request", type="about:blank")
         except IntegrityError as error:
